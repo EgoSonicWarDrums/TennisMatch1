@@ -27,9 +27,30 @@ let (|Integer|_|) (str: string) =
    if System.Int32.TryParse(str, &intvalue) then Some(intvalue)
    else None
 
+
+// The first thing I wanted to do was unit test this.  I peered into nuget,
+// I think this works /Library/Frameworks/Mono.framework/Versions/3.6.0/bin/nuget install FsUnit 
+// I discovered the way to add tests was with a new project.  Also I super hate that this project is
+// called test, but I don't hate it enough to rename it.  
+
+// actually maybe xamarin already had an option for an nunit project and I missed it?  regardless I added the project
+// Xamarin crashed several times but eventually complied.
+
+// more shameless msdn copying, but I want something to test
+let (|Float|_|) (str: string) =
+   let mutable floatvalue = 0.0
+   if System.Double.TryParse(str, &floatvalue) then Some(floatvalue)
+   else None
+
+
+
+
+
+
+
+
 [<EntryPoint>]
 let main args = 
     Console.WriteLine("Hello world!")
     
     0
-

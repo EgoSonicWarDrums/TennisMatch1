@@ -16,6 +16,11 @@ let parseFloat str =
      | Integer i -> Assert.Fail()
      | Float f -> Assert.Pass()
      | _ -> Assert.Fail()
+     
+let parseOperator str =
+    match str with
+    | Operator o -> Assert.Pass()
+    | _ -> Assert.Fail()
 
 
 [<Test>]
@@ -25,3 +30,23 @@ let ``Parses an int``() =
 [<Test>]
 let ``Parses a float``() =
     parseFloat "5.1"
+
+[<Test>]
+let ``Parses a +``() =
+    parseOperator "+"
+    
+[<Test>]
+let ``Parses a -``() =
+    parseOperator "-"
+    
+[<Test>]
+let ``Parses a *``() =
+    parseOperator "*"
+    
+[<Test>]
+let ``Parses a /``() =
+    parseOperator "/"
+    
+[<Test>]
+let ``Parses a ^``() =
+    parseOperator "^"

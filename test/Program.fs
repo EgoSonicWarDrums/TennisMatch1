@@ -42,11 +42,14 @@ let (|Float|_|) (str: string) =
    if System.Double.TryParse(str, &floatvalue) then Some(floatvalue)
    else None
 
-
-
-
-
-
+let (|Operator|_|) (str: string) =
+    match str.[0] with
+    | '+' -> Some("+")
+    | '-' -> Some("-")
+    | '*' -> Some("*")
+    | '/' -> Some("/")
+    | '^' -> Some("^")
+    | _ -> None
 
 
 [<EntryPoint>]

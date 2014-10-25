@@ -19,10 +19,16 @@ open System
 open System.Text.RegularExpressions
 open Tennis.parser
 
-// This is shamelessly copied from the MSDN example.  But I needed something
-// to put code in here to get the ball rolling and show what an Active Pattern
-// is.  This partitions an input space:  here it will partition the space of strings
-// into either "Integer" or None
+// Some notes.  I change parsing integers to use a parser combinator so that it would
+// be a little more challenging and interesting.  I also did this to solve a problem
+// which we would have run into with the current design: how do we tokenize the stream
+// of characters, that is given the string "2 + 3" we'd need to break it down into "2",
+// "+", and "3" before we could call |Integer| or |Operator| on it.  With this, you pass
+// in a list of chars and it greedily converts the characters in the list into an integer
+// until it hits a non digit char.  The IntegerParser returns a tuple of (int,remaining chars)
+//
+// parse is a Computational Expression
+// <|> is an operator that represents Either.  So for s it will try to parse a '+' or an '-'
 let IntegerParser: Parser<int> = 
     parse{ 
         let! s = ( CharParser '+' <|> CharParser '-' ) 

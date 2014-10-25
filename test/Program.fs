@@ -17,15 +17,20 @@ module Tennis.Main
 
 open System
 open System.Text.RegularExpressions
+open Tennis.parser
 
 // This is shamelessly copied from the MSDN example.  But I needed something
 // to put code in here to get the ball rolling and show what an Active Pattern
 // is.  This partitions an input space:  here it will partition the space of strings
 // into either "Integer" or None
-let (|Integer|_|) (str: string) =
-   let mutable intvalue = 0
-   if System.Int32.TryParse(str, &intvalue) then Some(intvalue)
-   else None
+let IntegerParser: Parser<int> = 
+    parse{ 
+        let! s = ( CharParser '+' <|> CharParser '-' ) 
+                 <|> Return '+'
+        let! l = parse { 
+                    let! l = Many1 DigitParser
+                    return l }
+        return int( new System.String( s::l |> List.toArray ) ) }
 
 
 // The first thing I wanted to do was unit test this.  I peered into nuget,
@@ -54,6 +59,8 @@ let (|Operator|_|) (str: string) =
 
 [<EntryPoint>]
 let main args = 
-    Console.WriteLine("Hello world!")
-    
+    let i = IntegerParser ( "12345 + 12345" |> Seq.toList )
+    match i with
+    | Success(i, rest) -> printfn "%d\nRest of string is: %A" i rest
+    | _ -> printfn "Hmmm"
     0

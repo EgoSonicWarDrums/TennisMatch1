@@ -21,6 +21,6 @@ Global
 		{411B0A3F-7D6E-4AC4-9D5D-898C27D62AA7}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = tests_for_test\tests_for_test.fsproj
+		StartupItem = test\Tennis.fsproj
 	EndGlobalSection
 EndGlobal

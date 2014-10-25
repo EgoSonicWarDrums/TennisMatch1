@@ -38,18 +38,16 @@
     <Reference Include="FSharp.Core" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="nunit.framework">
-      <Package>nunit</Package>
-    </Reference>
+    <Reference Include="nunit.framework" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Test.fs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.1\Framework\v4.0\Microsoft.FSharp.Targets" />
   <ItemGroup>
-    <ProjectReference Include="..\test\test.fsproj">
+    <ProjectReference Include="..\test\Tennis.fsproj">
       <Project>{411B0A3F-7D6E-4AC4-9D5D-898C27D62AA7}</Project>
-      <Name>test</Name>
+      <Name>Tennis</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

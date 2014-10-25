@@ -29,6 +29,8 @@ open Tennis.parser
 //
 // parse is a Computational Expression
 // <|> is an operator that represents Either.  So for s it will try to parse a '+' or an '-'
+//
+// There is an example use of IntegerParser in the main function
 let IntegerParser: Parser<int> = 
     parse{ 
         let! s = ( CharParser '+' <|> CharParser '-' ) 

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{4925A630-B079-445d-BCD4-3A9C94FE9307}") = "test", "test\test.fsproj", "{411B0A3F-7D6E-4AC4-9D5D-898C27D62AA7}"
+Project("{4925A630-B079-445d-BCD4-3A9C94FE9307}") = "Tennis", "test\Tennis.fsproj", "{411B0A3F-7D6E-4AC4-9D5D-898C27D62AA7}"
 EndProject
 Project("{4925A630-B079-445d-BCD4-3A9C94FE9307}") = "tests_for_test", "tests_for_test\tests_for_test.fsproj", "{391EA0B3-F5E5-40F9-9BC3-2FB6FCE95FC7}"
 EndProject

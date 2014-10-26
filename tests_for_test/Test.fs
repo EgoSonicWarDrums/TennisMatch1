@@ -12,15 +12,15 @@ let parseInt str =
      | _ -> Assert.Fail()
      
 
-let parseFloat str =
-   match str with
-     | Float f -> Assert.Pass()
+let parseFloat v str =
+   match FloatParser (str |> Seq.toList) with
+     | Success(f, rest ) -> Assert.AreEqual(0.000001, System.Math.Abs(f - v))
      | _ -> Assert.Fail()
      
 let parseOperator str =
-    match str with
-    | Operator o -> Assert.Pass()
-    | _ -> Assert.Fail()
+    match OperatorParser (str |> Seq.toList) with
+     | Success(i, rest ) -> Assert.Pass()
+     | _ -> Assert.Fail()
 
 
 [<Test>]
@@ -33,7 +33,15 @@ let ``Passing a non integer to ParseInteger fails``() =
 
 [<Test>]
 let ``Parses a float``() =
-    parseFloat "5.1"
+    parseFloat 5.1 "5.1"
+    
+[<Test>]
+let ``Parses a negative float``() =
+    parseFloat -5.1 "-5.1"
+    
+[<Test>]
+let ``Parses a float with an EE``() =
+    parseFloat -5.123e3 "-5.123e3"
 
 [<Test>]
 let ``Parses a +``() =
@@ -54,3 +62,13 @@ let ``Parses a /``() =
 [<Test>]
 let ``Parses a ^``() =
     parseOperator "^"
+    
+[<Test>]
+let ``Tokenize an integer``() =
+    let s = tokenize "5"
+    Assert.AreEqual( seq{ yield Integer(5) }, s )
+    
+[<Test>]
+let ``Tokenize a 5*4``() =
+    let s = tokenize "5*4"
+    Assert.AreEqual( seq{ yield Integer(5); yield Operator('*'); yield Integer(4) }, s )

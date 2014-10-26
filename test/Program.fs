@@ -19,6 +19,12 @@ open System
 open System.Text.RegularExpressions
 open Tennis.parser
 
+type Tokens =
+    | Integer of int
+    | Float of float
+    | Operator of char
+    | Whitespace of char
+
 // Some notes.  I change parsing integers to use a parser combinator so that it would
 // be a little more challenging and interesting.  I also did this to solve a problem
 // which we would have run into with the current design: how do we tokenize the stream
@@ -31,16 +37,51 @@ open Tennis.parser
 // <|> is an operator that represents Either.  So for s it will try to parse a '+' or an '-'
 //
 // There is an example use of IntegerParser in the main function
-let IntegerParser: Parser<int> = 
+let IntegerParser = 
     parse{ 
         let! s = ( CharParser '+' <|> CharParser '-' ) 
                  <|> Return '+'
         let! l = parse { 
                     let! l = Many1 DigitParser
                     return l }
-        return int( new System.String( s::l |> List.toArray ) ) }
+        return Integer(int( new System.String( s::l |> List.toArray ) )) }
+        
+let OperatorParser =
+    parse{ 
+        let! s = ( CharParser '+' <|> CharParser '-'  <|> CharParser '*' <|> CharParser '/' ) 
+        return Operator(s) }
+        
+let WhitespaceParser =
+    parse{ 
+        let! s = ( CharParser ' ' <|> CharParser '\n'  <|> CharParser '\t' <|> CharParser '\r' ) 
+        return Whitespace(s) }
 
-
+let FloatParser = 
+    parse{ 
+        let! s = ( CharParser '+' <|> CharParser '-' ) 
+                 <|> Return '+'
+        let! l = parse { 
+                    let! l = Many1 DigitParser
+                    return l }
+        return float( new System.String( s::l |> List.toArray ) ) }
+        
+let Parse clist =
+    match IntegerParser clist with
+    | Success(t,l) -> Success(t,l)
+    | Failure -> match OperatorParser clist with
+                 | Success(t,l) -> Success(t,l)
+                 | Failure -> WhitespaceParser clist
+        
+let tokenize str = 
+    let rec tokenize clist = 
+        seq{
+            match Parse clist with
+            | Success(t,l) -> yield t
+                              yield! tokenize l
+            | Failure -> ()
+        }
+    tokenize (str |> Seq.toList)
+        
 // The first thing I wanted to do was unit test this.  I peered into nuget,
 // I think this works /Library/Frameworks/Mono.framework/Versions/3.6.0/bin/nuget install FsUnit 
 // I discovered the way to add tests was with a new project.  Also I super hate that this project is
@@ -69,6 +110,6 @@ let (|Operator|_|) (str: string) =
 let main args = 
     let i = IntegerParser ( "12345 + 12345" |> Seq.toList )
     match i with
-    | Success(i, rest) -> printfn "%d\nRest of string is: %A" i rest
+    | Success(i, rest) -> printfn "%A\nRest of string is: %A" i rest
     | _ -> printfn "Hmmm"
     0
